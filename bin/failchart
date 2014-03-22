@@ -1,0 +1,39 @@
+#!/usr/bin/env node
+
+// Modules
+var program = require('commander');
+var path = require('path');
+var fs = require('fs');
+
+// Paths
+var basePath = path.join(__dirname, '..');
+var sourcePath = path.join(basePath, 'lib', 'source')
+
+// Core
+var failchart = require(path.join(basePath, 'index.js'));
+
+var pkgPath = path.join(basePath, 'package.json');
+var pkg = JSON.parse(fs.readFileSync(pkgPath));
+
+program
+  .version(pkg.version)
+  .option('-S, --summarize', 'Print a human-formatted summary of events.')
+  .option('-j, --journal', 'Use journalctl as data source')
+  .option('-s, --stdin', 'Use standard input as data source')
+  .option('-q, --quiet', 'Suppress errors')
+  .option('--nocolor', 'Disable colored output')
+  .parse(process.argv);
+
+var source;
+if (program.journal) source = require(path.join(sourcePath, 'journal'));
+if (program.stdin) source = require(path.join(sourcePath, 'stdin'));
+
+
+if (program.summarize) {
+  failchart.summarize({
+    source: source,
+    color: (program.nocolor) ? false : true,
+    logger: require(path.join(basePath, 'lib', 'logger')),
+    quiet: program.quiet
+  });
+}
