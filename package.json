@@ -16,6 +16,10 @@
   "dependencies": {
     "moment": "^2.5.1",
     "commander": "^2.1.0",
-    "charm": "^0.2.0"
+    "charm": "^0.2.0",
+    "backbone": "^1.1.2",
+    "lodash": "^2.4.1",
+    "query-engine": "^1.5.7",
+    "cli-table": "^0.3.0"
   }
 }
